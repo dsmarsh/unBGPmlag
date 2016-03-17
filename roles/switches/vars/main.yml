@@ -44,7 +44,7 @@ bgp:
       prefix_list_in: "allow_default_down"
       description: "FW Network"
 
-exit01:
+  exit01:
     myasn: "65501"
     networks: ["1.1.1.1/32"]
     #Internal Fabric ports to run BGP unnumbered on
