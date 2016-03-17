@@ -133,10 +133,12 @@ address-family ipv6 unicast
 {% endfor %}
 {% endfor %}
 !
-{### Configure ipv6 prefix lists ###} 
+{### Configure ipv6 prefix lists ###}
+{% if prefix_listsv6[ansible_hostname] is defined -%} 
 {% set lists = prefix_listsv6[ansible_hostname] -%}
 {% for list_name in lists.keys() -%}
   {% for seq in lists[list_name] -%}
   ipv6 prefix-list {{list_name}} seq {{seq}}
 {% endfor %}
 {% endfor %}
+{% endif %}
