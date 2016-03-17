@@ -1,5 +1,5 @@
 ---    
-- hosts: switches
+- hosts: network
   user: root
   roles:
     - common
