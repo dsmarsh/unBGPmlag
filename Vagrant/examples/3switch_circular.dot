@@ -1,5 +1,0 @@
-graph dc1 {
-   "sw1":"swp1" -- "sw2":"swp1"
-   "sw2":"swp2" -- "sw3":"swp1"
-   "sw3":"swp2" -- "sw1":"swp2"
-}

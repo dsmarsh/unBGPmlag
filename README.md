@@ -8,18 +8,8 @@ README coming soon
 file, and authorized public key for Ansible.
 - Vagrant/Vagrantfile: Vagrant definition to stand up virtual network
 
-
-#Physical Component
-- The network consists of 5 x 10Gb EdgeCore 5712-54X-O-AC-B and 7 x Switch EdgeCore 4600-54T-O-AC-B. 
-- Servers are connected single attached to each leaf switch, not counting oob.
-- Leafs are connected with 4 x 10GE DAC to each spine. 
-- Spines have 4 x 10GE connection to sec0 for internet/transit traffic.
-
-#Diagrams:
-
-
 #Install Instructions
-These steps will walk you through setting up your vagrant simulation environment 
+These steps will walk you through setting up your vagrant simulation environment
 
 1.  [Management VM Setup](#management-vm-setup)
 +  [Git Setup for Automation Scripts](#git-setup-for-automation-scripts)
@@ -29,12 +19,12 @@ These steps will walk you through setting up your vagrant simulation environment
 +  [Setup SSH keys and deploy to the network](#setup-ssh-keys-and-deploy-to-the-network)
 +  [Provision the Network via Automation](#provision-the-network-via-automation)
 +  [Test IPv4 Internet connectivity from server01](#test-ipv4-internet-connectivity-from-server01)
-+  [turnup.sh Optional Script](#turnupsh-optional-script) 
++  [turnup.sh Optional Script](#turnupsh-optional-script)
 
 #Management VM Setup
 Clone this git repo to the laptop or server being used to run vagrant
 ```bash
-$ git clone https://github.com/seanx820/gwo.git
+$ git clone https://github.com/dsmarsh/unBGPmlag.git
 ```
 
 Make sure the following is included in this git and installed on the laptop:
@@ -42,11 +32,11 @@ Make sure the following is included in this git and installed on the laptop:
 - definition data from: topology.def (included under gwo/Vagrant/)
 - the "helper_scripts" directory (included under gwo/Vagrant/)
 - The following must also be installed:
-    - Virtualbox installed: https://www.virtualbox.org/wiki/Downloads 
-    - Vagrant(v1.7+) installed: http://www.vagrantup.com/downloads 
-    - Cumulus Plugin for Vagrant installed: 
+    - Virtualbox installed: https://www.virtualbox.org/wiki/Downloads
+    - Vagrant(v1.7+) installed: http://www.vagrantup.com/downloads
+    - Cumulus Plugin for Vagrant installed:
     ```bash
-    $ vagrant plugin install vagrant-cumulus 
+    $ vagrant plugin install vagrant-cumulus
     ```
 
 - cd into the github directory on your laptop/server which was cloned, then into the Vagrant sub-directory
@@ -77,22 +67,22 @@ vagrant@mgmt:~$ sudo -i
 ```
 Install the following programs that are needed for automation
 ```bash
-root@mgmt:~# 
-- sudo apt-get update
-- sudo apt-get install -y isc-dhcp-server dnsmasq apache2
-- sudo apt-get install -y python-pip shedskin libyaml-dev sshpass git
-- sudo apt-get install apt-cacher
-- sudo pip install ansible
-- sudo pip install ansible --upgrade
-- sudo apt-get install apt-cacher-ng
-- sudo service apt-cacher restart
+root@mgmt:~#
+ sudo apt-get update
+ sudo apt-get install -y isc-dhcp-server dnsmasq apache2
+ sudo apt-get install -y python-pip shedskin libyaml-dev sshpass git
+ sudo apt-get install apt-cacher
+ sudo pip install ansible
+ sudo pip install ansible --upgrade
+ sudo apt-get install apt-cacher-ng
+ sudo service apt-cacher restart
 ```
 This completes the mgmt VM setup
 
 ##Git Setup for Automation Scripts
 Setup your username and email and clone your directory into the mgmt vm
 ```bash
-root@mgmt:~# 
+root@mgmt:~#
 - git init
 - git config --global user.name "Your Name"
 - git config --global user.email your_email@domain.com
@@ -141,13 +131,13 @@ $ vagrant up
 
 >  Do not just do a 'vagrant up' or it will take ~36 minutes to turn on vagrant.  This is because
 >  the servers are running DHCP on their eth0 port and there is no connectivity between
->  the DHCP server and the hosts so it will wait for timeout 3 times in serial 
+>  the DHCP server and the hosts so it will wait for timeout 3 times in serial
 
 #Validate connectivity
 Change into the gwo directory and run the following commands
 ```bash
 root@mgmt:~# cd gwo
-root@mgmt:~/gwo# 
+root@mgmt:~/gwo#
 root@mgmt:~/gwo# ansible network -m ping -u cumulus -k
   - (pwd: CumulusLinux!)
 root@mgmt:~/gwo# ansible servers -m ping -u vagrant -k

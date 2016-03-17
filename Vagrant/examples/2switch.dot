@@ -1,4 +1,0 @@
-graph dc1 {
-   "leaf1":"swp40" -- "leaf2":"swp40"
-   "leaf1":"swp50" -- "leaf2":"swp50"
-}
