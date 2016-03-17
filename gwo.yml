@@ -1,10 +1,16 @@
 ---    
-- hosts: network
+- hosts: spineandexternal
   user: root
   roles:
     - common
     - switches
- 
+
+- hosts: leaf
+  user: root
+  roles:
+    - common
+    - leaf
+     
 - hosts: servers
   user: root
   roles:

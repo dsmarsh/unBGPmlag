@@ -1,0 +1,11 @@
+[iptables]
+-A FORWARD --in-interface swp48 -j ACCEPT -s 0.0.0.0/0 -d 198.41.188.36/32
+-A FORWARD --in-interface swp48 -j ACCEPT -s 172.16.1.1/30 -d 172.16.1.2/30
+-A FORWARD --in-interface swp48,swp40 -j DROP -s 10.0.0.0/0 -d 0.0.0.0/0
+-A FORWARD --in-interface swp48,swp40 -j DROP -s 172.16.0.0/12 -d 0.0.0.0/0
+-A FORWARD --in-interface swp48,swp40 -j DROP -s 192.168.0.0/16 -d 0.0.0.0/0
+-A FORWARD --in-interface swp48 -j DROP -s 0.0.0.0/0 -d 0.0.0.0/0
+-A FORWARD --in-interface swp41,swp43,swp44,swp46 -j ACCEPT -s 192.168.137.0/24 -d 192.168.137.0/24
+-A FORWARD --in-interface swp41,swp43,swp44,swp46 -j DROP -s 0.0.0.0/0 -d 0.0.0.0/0
+-A FORWARD --in-interface swp45,swp1,swp2,swp3,swp4 -j ACCEPT -s 10.30.0.0/16 -d 10.30.0.0/16
+-A FORWARD --in-interface swp45,swp1,swp2,swp3,swp4 -j DROP -s 0.0.0.0/0 -d 0.0.0.0/0

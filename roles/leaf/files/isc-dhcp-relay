@@ -1,0 +1,19 @@
+# Configured by Ansible
+
+# Defaults for isc-dhcp-relay initscript
+# sourced by /etc/init.d/isc-dhcp-relay
+# installed at /etc/default/isc-dhcp-relay by the maintainer scripts
+
+#
+# This is a POSIX shell fragment
+#
+
+# What servers should the DHCP relay forward requests to?
+SERVERS="10.2.0.254"
+
+# On what interfaces should the DHCP relay (dhrelay) serve DHCP requests?
+# Always include the interface towards the DHCP server.
+INTERFACES="eth0 swp1 swp2 swp3 swp4 swp5 swp6 swp7 swp8 swp9 swp10 swp11 swp12 swp13 swp14 swp15 swp16 swp17 swp18 swp19 swp20 swp21 swp22 swp23 swp24 swp25 swp26 swp27 swp28 swp29 swp30"
+
+# Additional options that are passed to the DHCP relay daemon?
+OPTIONS=

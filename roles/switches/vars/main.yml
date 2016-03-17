@@ -11,18 +11,7 @@ interfaces:
   spine02:
     loopback:
       ipv4: "4.4.4.4/32"
-  leaf01:
-    loopback:
-      ipv4: "5.5.5.532"      
-  leaf02:
-    loopback:
-      ipv4: "6.6.6.6/32"
-  leaf03:
-    loopback:
-      ipv4: "7.7.7.7/32"
-  leaf04:
-    loopback:
-      ipv4: "8.8.8.8/32"      
+    
       
 bgp:
   spine01:

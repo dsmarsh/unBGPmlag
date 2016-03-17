@@ -21,6 +21,11 @@ exit
 spine
 external
 
+[spineandexternal:children]
+exit
+spine
+external
+
 [servers]
 server01
 

@@ -1,0 +1,57 @@
+{% set node = interfaces[ansible_hostname] %}
+{% set bgpvars = bgp[ansible_hostname] -%}
+
+#Configured by Ansible
+auto eth0
+iface eth0 inet dhcp
+
+auto vagrant
+iface vagrant inet dhcp
+
+
+{% if node.loopback is defined %}
+#### LOOPBACKS ####
+auto lo
+iface lo inet loopback
+{% for interface in node.loopback.keys() %}
+{% if interface == "ipv4" %}
+  address {{node.loopback[interface]}}
+{% elif interface == "ipv6" %}
+  address {{node.loopback[interface]}}
+{% endif %}
+{% endfor %}
+{% endif %}
+
+
+{% if node.swp30 is defined -%}
+#### oob ports for isc-dhcp-relay ####
+auto swp30
+iface swp30
+  address {{node.swp30.ipv4}}
+{% endif -%}
+
+
+
+{% if bgpvars.internal_fabric.interfaces is defined -%}
+#### Fabric ports ####
+{% for interface in bgpvars.internal_fabric.interfaces -%}
+auto {{interface}}
+iface {{interface}}
+  mtu 9216
+{% endfor %}
+{% endif -%}
+
+{% if bgpvars.exit_peers.interfaces is defined -%}
+#### Firewall Southbound Ports ####
+{% for interface in bgpvars.exit_peers.interfaces -%}
+auto {{interface}}
+iface {{interface}}
+  mtu 9216
+{% endfor %}
+{% endif -%}
+
+
+
+
+
+
