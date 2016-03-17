@@ -34,7 +34,7 @@ echo "Generating SSH Key..."
 echo "Copying Key into /var/www/html..."
 cp /root/.ssh/id_rsa.pub /var/www/html/authorized_keys
 
-REPOSITORY="https://github.com/CumulusNetworks/aiticon"
+REPOSITORY="https://github.com/seanx820/gwo"
 dir=aiticon
 
 #rest of turnup
