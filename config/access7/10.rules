@@ -1,3 +1,0 @@
-[iptables]
--A FORWARD -j ACCEPT -s 10.30.0.0/16 -d 10.30.0.0/16
--A FORWARD -j DROP -s 0.0.0.0/0 -d 0.0.0.0/0

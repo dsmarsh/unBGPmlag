@@ -1,9 +1,0 @@
-
-#Configured by Ansible
-auto vagrant
-iface vagrant inet dhcp
-
-auto eth0
-iface eth0 inet dhcp
-
-auto eth1
