@@ -34,24 +34,51 @@ bgp:
       prefix_list_out: "allow_limited_default"
       prefix_list_in: "allow_internal_servers"
       description: "Internal Fabric Network"
-    fw_peers:
+    exit_peers:
       interfaces: ["swp29", "swp30"]
       prefix_list_out: "allow_internal_servers"
       prefix_list_in: "allow_default_down"
       description: "FW Network"
 
+  spine02:
+    myasn: "65002"
+    networks: ["4.4.4.4/32"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp1","swp2","swp3","swp4"]
+      prefix_list_out: "allow_limited_default"
+      prefix_list_in: "allow_internal_servers"
+      description: "Internal Fabric Network"
+    exit_peers:
+      interfaces: ["swp29", "swp30"]
+      prefix_list_out: "allow_internal_servers"
+      prefix_list_in: "allow_default_down"
+      description: "FW Network"
+      
 prefix_lists:
   spine01:
     allow_limited_default:
       - "10 permit 0.0.0.0/0"
-      - "11 permit 3.3.3.3/0"
-      - "20 permit 172.16.0.0/24 le 32"
+      - "11 permit 3.3.3.3/32"
       - "100 deny any"
     allow_default_down:
       - "10 permit 0.0.0.0/0"
       - "40 permit 1.1.1.1/32"
       - "41 permit 2.2.2.2/32"
-      - "41 permit 99.99.99.99/32"      
+      - "100 deny any"
+    allow_internal_servers:
+      - "10 permit 9.9.9.9/32" 
+      - "100 deny any"
+
+  spine02:
+    allow_limited_default:
+      - "10 permit 0.0.0.0/0"
+      - "11 permit 4.4.4.4/32"
+      - "100 deny any"
+    allow_default_down:
+      - "10 permit 0.0.0.0/0"
+      - "40 permit 1.1.1.1/32"
+      - "41 permit 2.2.2.2/32"
       - "100 deny any"
     allow_internal_servers:
       - "10 permit 9.9.9.9/32" 
