@@ -134,6 +134,7 @@ address-family ipv6 unicast
 {% endfor %}
 !
 {### Configure ipv6 prefix lists ###}
+{% if prefix_listsv6 is defined -%} 
 {% if prefix_listsv6[ansible_hostname] is defined -%} 
 {% set lists = prefix_listsv6[ansible_hostname] -%}
 {% for list_name in lists.keys() -%}
@@ -141,4 +142,5 @@ address-family ipv6 unicast
   ipv6 prefix-list {{list_name}} seq {{seq}}
 {% endfor %}
 {% endfor %}
+{% endif %}
 {% endif %}
