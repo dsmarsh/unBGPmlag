@@ -14,7 +14,7 @@ interface {{interface}}
 {% endfor %}
 !
 {### Configure the fabric ports IPv6 settings for unnumbered operation ###}
-{% for interface in bgpvars.fw_peers.interfaces -%}
+{% for interface in bgpvars.exit_peers.interfaces -%}
 interface {{interface}}
  no ipv6 nd suppress-ra
  ipv6 nd ra-interval 3
@@ -64,26 +64,26 @@ router bgp {{ bgpvars.myasn }}
  {% endfor %} 
 
 {### Loop through server BGP connections ###}
-  neighbor fw_peers peer-group
-  neighbor fw_peers description {{bgpvars.fw_peers.description}}
-  neighbor fw_peers advertisement-interval 0
-  neighbor fw_peers timers 1 3
-  neighbor fw_peers timers connect 3
-  neighbor fw_peers remote-as external
-  neighbor fw_peers capability extended-nexthop
-{### Configure fw_peers prefix lists ###}
-  {% if bgpvars.fw_peers.prefix_list_out is defined -%}
-    neighbor fw_peers prefix-list {{bgpvars.fw_peers.prefix_list_out}} out
+  neighbor exit_peers peer-group
+  neighbor exit_peers description {{bgpvars.exit_peers.description}}
+  neighbor exit_peers advertisement-interval 0
+  neighbor exit_peers timers 1 3
+  neighbor exit_peers timers connect 3
+  neighbor exit_peers remote-as external
+  neighbor exit_peers capability extended-nexthop
+{### Configure exit_peers prefix lists ###}
+  {% if bgpvars.exit_peers.prefix_list_out is defined -%}
+    neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_out}} out
   {% endif -%}
 
-  {% if bgpvars.fw_peers.prefix_list_in is defined -%}
-    neighbor fw_peers prefix-list {{bgpvars.fw_peers.prefix_list_in}} in
+  {% if bgpvars.exit_peers.prefix_list_in is defined -%}
+    neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_in}} in
   {% endif -%}
 
 {### Configure interfaces ###}
- {% for interface in bgpvars.fw_peers.interfaces -%}
+ {% for interface in bgpvars.exit_peers.interfaces -%}
    neighbor {{interface}} interface
-   neighbor {{interface}} peer-group fw_peers
+   neighbor {{interface}} peer-group exit_peers
  {% endfor %}
 !
 address-family ipv6 unicast
@@ -101,9 +101,9 @@ address-family ipv6 unicast
  {% endfor %}
 !
 {### Configure fw peers interfaces ###}
-   neighbor fw_peers activate
- {% for interface in bgpvars.fw_peers.interfaces -%}
-   neighbor {{interface}} peer-group fw_peers
+   neighbor exit_peers activate
+ {% for interface in bgpvars.exit_peers.interfaces -%}
+   neighbor {{interface}} peer-group exit_peers
    neighbor {{interface}} activate
  {% endfor %}
 {### Configure internal fabric ipv6 prefix lists ###}
@@ -113,12 +113,12 @@ address-family ipv6 unicast
  {% if bgpvars.internal_fabric.prefix_list_in is defined -%}
    neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_in}} in
  {% endif -%}
-{### Configure fw_peers ipv6 prefix lists ###}
- {% if bgpvars.fw_peers.prefix_list_out is defined -%}
-   neighbor fw_peers prefix-list {{bgpvars.fw_peers.prefix_list_out}} out
+{### Configure exit_peers ipv6 prefix lists ###}
+ {% if bgpvars.exit_peers.prefix_list_out is defined -%}
+   neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_out}} out
  {% endif -%}
- {% if bgpvars.fw_peers.prefix_list_in is defined -%}
-   neighbor fw_peers prefix-list {{bgpvars.fw_peers.prefix_list_in}} in
+ {% if bgpvars.exit_peers.prefix_list_in is defined -%}
+   neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_in}} in
  {% endif -%}
 ! 
  exit-address-family
