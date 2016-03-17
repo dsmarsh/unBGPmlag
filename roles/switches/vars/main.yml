@@ -54,7 +54,6 @@ prefix_lists:
       - "41 permit 99.99.99.99/32"      
       - "100 deny any"
     allow_internal_servers:
-      - "10 permit 185.114.212.0/22 le 32"
-      - "20 permit 172.16.0.0./24 le 32"                
+      - "10 permit 9.9.9.9/32" 
       - "100 deny any"
   
