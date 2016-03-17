@@ -1,0 +1,23 @@
+interfaces:
+
+  internet:
+    loopback:
+      ipv4: "10.2.1.105/32"
+      ipv6: "fd::105/128"
+
+bgp:
+  internet:
+    myasn: "123456"
+    bgp_peers:
+      bgp0:
+        asn: "203968"
+        ipv4: ["172.16.1.2"]
+        ipv6: ["fda:1::2"]
+        prefix_list_out: "allow_default"
+        description: "bgp0"
+
+prefix_lists:
+  internet:
+    allow_default: 
+      - "10 permit 0.0.0.0/0"
+      - "100 deny any"

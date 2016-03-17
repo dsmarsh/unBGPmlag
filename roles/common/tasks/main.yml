@@ -1,0 +1,46 @@
+- name: create config folder locally
+  file: path=config/{{ ansible_hostname }} state=directory recurse=yes
+  delegate_to: localhost
+  tags:
+    - local
+
+##Example for configuring an apt cache proxy
+- name: configure APT cache proxy
+  copy: src=90apt-proxy dest=/etc/apt/apt.conf.d/90apt-proxy
+
+- name: 90apt-proxy locally
+  copy: src=90apt-proxy dest=config/{{ ansible_hostname }}
+  delegate_to: localhost
+  tags:
+    - local
+
+##Example of a time stamp to use to mark files using {{timestamp}}
+- name: Set time stamp
+  local_action: shell date
+  register: timestamp
+  run_once: true
+
+- name: Configure NTP
+  copy: src=ntp.conf dest=/etc/ntp.conf
+  notify: restart ntp
+
+- name: copy ntp locally
+  copy: src=ntp.conf dest=config/{{ ansible_hostname }}
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Disable ZTP for virtual environment
+  command: /usr/lib/cumulus/autoprovision --disable
+  ignore_errors: yes
+
+- name: Delete default route on vagrant device
+  copy: src=etc/dhcp/dhclient-exit-hooks.d/remove_default_vagrant dest=/etc/dhcp/dhclient-exit-hooks.d/remove_default_vagrant
+  tags:
+    - remove_default
+
+- name: Refresh the Vagrant Interface
+  shell: ifdown vagrant; ifup vagrant
+  tags:
+    - remove_default
+

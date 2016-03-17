@@ -1,0 +1,42 @@
+{% set node = interfaces[ansible_hostname] %}
+{% set bgpvars = bgp[ansible_hostname] -%}
+
+#Configured by Ansible
+auto eth0
+iface eth0 inet dhcp
+
+auto vagrant
+iface vagrant inet dhcp
+
+{% for interface in  node.keys() -%}
+auto {{interface}}
+{% if interface == "lo" -%}
+iface lo inet loopback
+{% else %}
+iface {{interface}}
+{% endif -%}
+  address {{node[interface].ipv4}}
+{% if node[interface].ipv6 is defined %}
+  address {{node[interface].ipv6}}
+{% endif %}
+{% if node[interface].alias is defined %}
+  alias {{ node[interface].alias }}
+{% endif %}
+{% if node[interface].swp is defined %}
+  bridge-ports {{ node[interface].swp }}
+  bridge-stp on
+{% endif %}
+{% if node[interface].mtu is defined %}
+  mtu {{ node[interface].mtu }}
+{% endif %}
+{% endfor %}
+
+{% if bgpvars.internal_fabric.interfaces is defined -%}
+#### Fabric ports ####
+{% for interface in bgpvars.internal_fabric.interfaces -%}
+auto {{interface}}
+iface {{interface}}
+  mtu 9216
+{% endfor %}
+{% endif -%}
+

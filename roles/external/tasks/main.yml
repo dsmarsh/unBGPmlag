@@ -1,0 +1,38 @@
+- name: Configure /etc/network/interfaces
+  template: src=interfaces.j2 dest=/etc/network/interfaces
+  tags:
+    - interfaces
+
+- name: Reload Interfaces
+  shell: ifreload -a
+  tags:
+    - interfaces
+
+- name: Enable NAT on Vagrant interface for Downstream Hosts
+  shell: "{{ item }}"
+  with_items:
+    - "iptables --flush -t nat"
+    - "iptables -t nat -A POSTROUTING -o vagrant -j MASQUERADE"
+
+- name: Configure quagga daemons file
+  copy: src=daemons dest=/etc/quagga/daemons backup=yes
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: Configure zebra daemon file
+  template: src=zebra_config.j2 dest=/etc/quagga/zebra.conf
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: Configure quagga configuration
+  template: src=quagga_config.j2 dest=/etc/quagga/Quagga.conf
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: Verify Quagga is running
+  service: name=quagga state=started
+  tags:
+    - quagga

@@ -1,0 +1,153 @@
+interfaces:
+  access0:
+    lo:
+      ipv6: "fd::50/128"
+      ipv4: "10.2.1.50/32"
+    br-oob:
+      ipv4: "10.2.50.1/24"
+      swp: "glob swp1-48"
+
+  access1:
+    lo:
+      ipv6: "fd::51/128"
+      ipv4: "10.2.1.51/32"
+    br-oob:
+      ipv4: "10.2.51.1/24"
+      swp: "glob swp1-48"
+
+  access7:
+    lo:
+      ipv6: "fd::57/128"
+      ipv4: "10.2.1.57/32"
+    swp9:
+      ipv4: "185.114.212.5/30"
+    br-oob:
+      ipv4: "10.2.57.1/24"
+      swp: "glob swp1-8 glob swp10-48"
+
+bgp:
+  access0:
+    myasn: "65000"
+    #If we need to advertise aggregate addresses from this switch
+    #aggregates: ["192.168.10.0/23","192.168.11.0/24"]
+    #If we need to advertise networks from this switch
+    networks: ["10.2.1.50/32", "10.2.50.1/24"]
+    networksv6: ["fd::50/128"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp49","swp50","swp51","swp52"]
+      prefix_list_in: "allow_internal_summary"
+      prefix_list_out: "allow_rack_subnets"
+      description: "Internal Fabric Network"
+    #List of interfaces to run BGP unnumbered facing the servers
+    #NONE FOR THIS DEPLOYMENT
+  access1:
+    myasn: "65001"
+    #If we need to advertise aggregate addresses from this switch
+    #aggregates: ["192.168.10.0/23","192.168.11.0/24"]
+    #If we need to advertise networks from this switch
+    networks: ["10.2.1.51/32", "10.2.51.1/24"]
+    networksv6: ["fd::51/128"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp49","swp50","swp51","swp52"]
+      prefix_list_in: "allow_internal_summary"
+      prefix_list_out: "allow_rack_subnets"
+      description: "Internal Fabric Network"
+    #List of interfaces to run BGP unnumbered facing the servers
+    #NONE FOR THIS DEPLOYMENT
+  access7:
+    myasn: "65007"
+    #If we need to advertise aggregate addresses from this switch
+    #aggregates: ["192.168.10.0/23","192.168.11.0/24"]
+    #If we need to advertise networks from this switch
+    networks: ["10.2.1.57/32","185.114.212.5/30", "10.2.57.1/24"]
+    networksv6: ["fd::57/128"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp49","swp50","swp51","swp52"]
+      prefix_list_in: "allow_internal_summary"
+      prefix_list_out: "allow_rack_subnets"
+      description: "Internal Fabric Network"
+    #List of interfaces to run BGP unnumbered facing the servers
+    #NONE FOR THIS DEPLOYMENT
+
+     
+prefix_lists:
+  access0:
+    allow_internal_summary: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 0.0.0.0/0"
+      - "30 permit 10.2.1.0/24 le 32"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 10.2.1.50/32"
+      - "30 permit 10.2.1.10/32"
+      - "40 permit 10.2.1.11/32"      
+      - "50 permit 10.2.50.1/24"
+      - "100 deny any"
+  access1:
+    allow_internal_summary: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 0.0.0.0/0"
+      - "30 permit 10.2.1.0/24 le 32"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 10.2.1.51/32"
+      - "30 permit 10.2.1.10/32"
+      - "40 permit 10.2.1.11/32" 
+      - "50 permit 10.2.51.1/24"      
+      - "100 deny any"
+  access7:
+    allow_internal_summary: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 0.0.0.0/0"
+      - "30 permit 10.2.1.0/24 le 32"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 185.114.212.0/22 le 32"
+      - "20 permit 10.2.1.57/32"
+      - "30 permit 10.2.1.10/32"
+      - "40 permit 10.2.1.11/32"  
+      - "50 permit 10.2.57.1/24" 
+      - "100 deny any"
+      
+prefix_listsv6:      
+  access0:
+    allow_internal_summary: 
+      - "10 permit 2a06:71c0::/29 le 128"
+      - "20 permit 0::0/0"
+      - "30 permit fd::/120 le 128"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 2a06:71c0::/29 le 128"
+      - "20 permit fd::50/128"
+      - "30 permit fd::10/128"
+      - "40 permit fd::11/128"
+      - "100 deny any"
+  access1:
+    allow_internal_summary: 
+      - "10 permit 2a06:71c0::/29 le 128"
+      - "20 permit 0::0/0"
+      - "30 permit fd::/120 le 128"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 2a06:71c0::/29 le 128"
+      - "20 permit fd::51/128"
+      - "30 permit fd::10/128"
+      - "40 permit fd::11/128"      
+      - "100 deny any"
+  access7:
+    allow_internal_summary: 
+      - "10 permit 2a06:71c0::/29 le 128"
+      - "20 permit 0::0/0"
+      - "30 permit fd::/120 le 128"
+      - "100 deny any"
+    allow_rack_subnets: 
+      - "10 permit 12a06:71c0::/29 le 128"
+      - "20 permit fd::57/128"
+      - "30 permit fd::10/128"
+      - "40 permit fd::11/128"      
+      - "100 deny any"

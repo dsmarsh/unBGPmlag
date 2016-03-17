@@ -1,0 +1,54 @@
+#Configured by Ansible
+auto eth0
+iface eth0 inet dhcp
+
+auto vagrant
+iface vagrant inet dhcp
+
+
+#### LOOPBACKS ####
+auto lo
+iface lo inet loopback
+  address 10.2.1.10/32
+  address fd::10/128
+
+
+#### oob ports for isc-dhcp-relay ####
+auto swp30
+iface swp30
+  address 10.2.0.252/24
+#### Fabric ports ####
+auto swp1
+iface swp1
+  mtu 9216
+auto swp2
+iface swp2
+  mtu 9216
+auto swp3
+iface swp3
+  mtu 9216
+auto swp4
+iface swp4
+  mtu 9216
+auto swp9
+iface swp9
+  mtu 9216
+auto swp10
+iface swp10
+  mtu 9216
+auto swp49
+iface swp49
+  mtu 9216
+auto swp50
+iface swp50
+  mtu 9216
+#### Firewall Southbound Ports ####
+auto swp38
+iface swp38
+  mtu 9216
+
+
+
+
+
+

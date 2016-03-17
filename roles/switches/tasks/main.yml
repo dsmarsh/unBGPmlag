@@ -1,0 +1,104 @@
+- name: create config folder locally
+  file: path=config/{{ ansible_hostname }} state=directory recurse=yes
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Configure /etc/network/interfaces
+  template: src=interfaces.j2 dest=/etc/network/interfaces
+  notify: reload networking
+  tags:
+    - interfaces
+
+- name: Configure /etc/network/interfaces locally
+  template: src=interfaces.j2 dest=config/{{ ansible_hostname }}/interfaces
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Restart Networking
+  shell: ifreload -a
+  tags:
+    - interfaces
+
+- name: Force an interfaces file reload if the ports.conf has changed
+  meta: flush_handlers
+
+- name: Configure quagga daemons file
+  copy: src=daemons dest=/etc/quagga/daemons backup=yes
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: copy quagga daemons locally
+  copy: src=daemons  dest=config/{{ ansible_hostname }}
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Configure zebra daemon file
+  template: src=zebra_config.j2 dest=/etc/quagga/zebra.conf
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: copy zebra locally
+  template: src=zebra_config.j2  dest=config/{{ ansible_hostname }}/zebra.conf
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Enable Quagga reload
+  copy: src=quagga.default dest=/etc/default/quagga
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: copy quagga.default locally
+  copy: src=quagga.default  dest=config/{{ ansible_hostname }}
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Force Quagga restart if enabling reload for the first time
+  meta: flush_handlers
+
+- name: Configure quagga configuration
+  template: src=quagga_config.j2 dest=/etc/quagga/Quagga.conf
+  notify: restart quagga
+  tags:
+    - quagga
+
+- name: copy Quagga conf locally
+  template: src=quagga_config.j2  dest=config/{{ ansible_hostname }}/Quagga.conf
+  delegate_to: localhost
+  tags:
+    - local
+
+- name: Restart Quagga
+  shell: service quagga restart
+  tags:
+    - quagga
+
+- name: Verify Quagga is running
+  service: name=quagga state=started
+  tags:
+    - quagga
+
+- name: Install mgmtvrf
+  apt: name=cl-mgmtvrf state=present
+  tags:
+    - mgmtvrf
+    - install
+
+- name: Check if mgmtvrf is installed
+  stat: path=/var/lib/cl-mgmtvrf/mgmtvrf.conf
+  register: mgmtvrf
+  tags:
+    - mgmtvrf
+
+- name: Setup Mgmtvrf
+  command: cl-mgmtvrf -e
+  when: mgmtvrf.stat.exists == False
+  tags:
+    - mgmtvrf

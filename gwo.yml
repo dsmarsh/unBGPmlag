@@ -1,0 +1,19 @@
+---    
+- hosts: switches
+  user: root
+  roles:
+    - common
+    - switches
+ 
+- hosts: servers
+  user: root
+  roles:
+    - common
+    - servers
+
+- hosts: external
+  user: root
+  roles:
+    - common
+    - external
+

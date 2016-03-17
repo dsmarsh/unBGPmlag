@@ -1,0 +1,29 @@
+#Configured by Ansible
+auto eth0
+iface eth0 inet dhcp
+
+auto vagrant
+iface vagrant inet dhcp
+
+auto lo
+iface lo inet loopback
+  address 10.2.1.80/32
+  address fd::80/128
+auto swp5
+iface swp5
+  address 2a06:71c0::/127
+
+#### Fabric ports ####
+auto swp49
+iface swp49
+  mtu 9216
+auto swp50
+iface swp50
+  mtu 9216
+auto swp51
+iface swp51
+  mtu 9216
+auto swp52
+iface swp52
+  mtu 9216
+

@@ -1,0 +1,20 @@
+10.2.0.100 bgp0
+10.2.0.110 sec0
+10.2.50.150 lb-mysql-0
+10.2.51.160 os-controller-0
+10.2.57.180 twads0
+10.2.0.115 lb0 
+
+10.2.0.240 internet
+
+10.2.0.10 aggregation0
+10.2.0.11 aggregation1
+
+10.2.0.50 access0
+10.2.0.51 access1
+10.2.0.57 access7
+
+10.2.0.80 cloud1
+
+10.2.0.1 oob
+10.2.0.254 mgmt

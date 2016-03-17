@@ -1,0 +1,12 @@
+
+#Configured by Ansible
+auto vagrant
+iface vagrant inet dhcp
+
+auto eth0
+iface eth0 inet dhcp
+
+auto eth1
+iface eth1 inet6 static 
+ address 2a06:71c0::1/127
+ post-up ip -6 route add default via 2a06:71c0::0
