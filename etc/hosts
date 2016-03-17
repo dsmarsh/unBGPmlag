@@ -1,20 +1,17 @@
-10.2.0.100 bgp0
-10.2.0.110 sec0
-10.2.50.150 lb-mysql-0
-10.2.51.160 os-controller-0
-10.2.57.180 twads0
-10.2.0.115 lb0 
+10.2.0.101 leaf01
+10.2.0.102 leaf02
+10.2.0.103 leaf03
+10.2.0.104 leaf04
 
-10.2.0.240 internet
+10.2.0.201 spine01
+10.2.0.202 spine02
 
-10.2.0.10 aggregation0
-10.2.0.11 aggregation1
+10.2.0.51 exit01
+10.2.0.52 exit02
 
-10.2.0.50 access0
-10.2.0.51 access1
-10.2.0.57 access7
+10.2.0.100 external
 
-10.2.0.80 cloud1
+10.2.0.251 server01 
 
 10.2.0.1 oob
 10.2.0.254 mgmt
