@@ -11,6 +11,9 @@ interfaces:
   spine02:
     loopback:
       ipv4: "4.4.4.4/32"
+  external:
+    loopback:
+      ipv4: "99.99.99.99/32" 
     
       
 bgp:
@@ -61,7 +64,7 @@ bgp:
   
   exit02:
     myasn: "65502"
-    networks: ["2.2.2.2/32"]
+    networks: ["99.99.99.99/32"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
       interfaces: ["swp51","swp52"]
@@ -73,8 +76,36 @@ bgp:
       prefix_list_out: "allow_internal_servers"
       prefix_list_in: "allow_default_down"
       description: "North to internet" 
-            
+ 
+  external:
+    myasn: "65534"
+    networks: ["2.2.2.2/32"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp1","swp2"]
+      prefix_list_out: "allow_limited_default"
+      prefix_list_in: "allow_internal_servers"
+      description: "Internal Fabric Network"
+
+                 
 prefix_lists:
+  external:
+    allow_limited_default:
+      - "10 permit 0.0.0.0/0"
+      - "11 permit 99.99.99.99/32"
+      - "100 deny any"
+    allow_internal_servers:
+      - "10 permit 1.1.1.1/32"
+      - "11 permit 2.2.2.2/32" 
+      - "12 permit 3.3.3.3/32"  
+      - "13 permit 4.4.4.4/32"  
+      - "14 permit 5.5.5.5/32"  
+      - "15 permit 6.6.6.6/32"  
+      - "16 permit 7.7.7.7/32"  
+      - "17 permit 8.8.8.8/32"  
+      - "20 permit 9.9.9.9/32" 
+      - "100 deny any"
+      
   spine01:
     allow_limited_default:
       - "10 permit 0.0.0.0/0"
