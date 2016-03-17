@@ -1,43 +1,28 @@
-[access]
-access0
-access1
-access7
+[leaf]
+leaf01
+leaf02
+leaf04
 
 [spine]
-aggregation0
-aggregation1
+spine01
+spine02
 
-[cloud]
-cloud1
+[exit]
+exit01
+exit02
 
 [oob]
 oob
 
 [network:children]
-access
-cloud
+leaf
+exit
 spine
-internet
+external
 
 [servers]
-lb-mysql-0
-os-controller-0
-twads0
+server01
 
-[linuxhosts:children]
-servers
-fw
-bgp
-lb
 
-[fw]
-sec0
-
-[bgp]
-bgp0
-
-[lb]
-lb0
-
-[internet]
-internet
+[external]
+external
