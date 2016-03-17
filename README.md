@@ -1,23 +1,6 @@
 # Example DC deployment
 
-This is collaboration between Cumulus and Aiticon to automate bringing up 
-a new Datacenter network.
-
-The goal is to deploy a 2 x 10G spine (aggregation), 7 leaf x 1G access network with 3 x 10Gb leafs for the cloud network
-utilizing ONIE to install system  images on the network switches, ZTP to setup a baseline config
-(deploy ssh keys), and finally Salt to push the actual network configurations (PTM, IP, BGP, etc). 
-Since this is a 3-Day Jumpstart Engagement only limited automation tool prototyping will be available.
-
-There are 2 parts to the project.  First stand up the network in a virtual
-environment using Cumulus VX and Vagrant.  Then deploy automation tools to configure
-the virtual network.  For the simulation we will limit the network simulation to 3 racks
-which contain 14 devices (2 x 10G Spines, 3 x 1G leafs, 1 x 10G leaf), bgp0 edge device, 
-sec0 (firewall) and a VX image simulating the internet (called internet).  This also contains
-an Ubuntu mgmt VM and a oob L2 switch connecting the Ubuntu VM (which is running DHCP, apache, etc).
-
-Once the physical equipment arrives test the same automation
-on the real network.  The goal is to have a virtual development,
-testing network and a production physical network.
+README coming soon
 
 #Files:
 - etc/dhcp/dhcpd.conf: Sample dhcp file used in the Vagrant instance
@@ -33,9 +16,7 @@ file, and authorized public key for Ansible.
 - Spines have 4 x 10GE connection to sec0 for internet/transit traffic.
 
 #Diagrams:
-![Diagram](diagram.png)
-Shared Google Drawing
-https://docs.google.com/a/cumulusnetworks.com/presentation/d/1BSuLQU7zmy5YMHse9yE6u4vQZPF_gVN8RovnHH0Krzk/edit?usp=sharing
+
 
 #Install Instructions
 These steps will walk you through setting up your vagrant simulation environment 
@@ -47,19 +28,19 @@ These steps will walk you through setting up your vagrant simulation environment
 +  [Validate connectivity](#validate-connectivity)
 +  [Setup SSH keys and deploy to the network](#setup-ssh-keys-and-deploy-to-the-network)
 +  [Provision the Network via Automation](#provision-the-network-via-automation)
-+  [Test IPv4 Internet connectivity from de-f2-p-twads0](#test-ipv4-internet-connectivity-from-de-f2-p-twads0)
++  [Test IPv4 Internet connectivity from server01](#test-ipv4-internet-connectivity-from-server01)
 +  [turnup.sh Optional Script](#turnupsh-optional-script) 
 
 #Management VM Setup
 Clone this git repo to the laptop or server being used to run vagrant
 ```bash
-$ git clone https://github.com/CumulusNetworks/aiticon.git
+$ git clone https://github.com/seanx820/gwo.git
 ```
 
 Make sure the following is included in this git and installed on the laptop:
-- topology data from: topology.dot (included under aiticon/Vagrant/)
-- definition data from: topology.def (included under aiticon/Vagrant/)
-- the "helper_scripts" directory (included under aiticon/Vagrant/)
+- topology data from: topology.dot (included under gwo/Vagrant/)
+- definition data from: topology.def (included under gwo/Vagrant/)
+- the "helper_scripts" directory (included under gwo/Vagrant/)
 - The following must also be installed:
     - Virtualbox installed: https://www.virtualbox.org/wiki/Downloads 
     - Vagrant(v1.7+) installed: http://www.vagrantup.com/downloads 
@@ -70,7 +51,7 @@ Make sure the following is included in this git and installed on the laptop:
 
 - cd into the github directory on your laptop/server which was cloned, then into the Vagrant sub-directory
 ```bash
-cd ~/aiticon/Vagrant
+cd ~/gwo/Vagrant
 ```
 
 - turn on the mgmt vm and the layer 2 oob switch connected to it
@@ -115,7 +96,7 @@ root@mgmt:~#
 - git init
 - git config --global user.name "Your Name"
 - git config --global user.email your_email@domain.com
-- git clone https://github.com/CumulusNetworks/aiticon.git
+- git clone https://github.com/CumulusNetworks/gwo.git
 ```
 
 ##Validate oob connection on the management station
@@ -130,13 +111,13 @@ Verify network setup is correct and configure DNS, DHCP and WWW directory
 
 ###Setup DNS
 ```bash
-root@mgmt:~# cat ~/aiticon/etc/hosts | sudo tee /etc/hosts
+root@mgmt:~# cat ~/gwo/etc/hosts | sudo tee /etc/hosts
 root@mgmt:~# service dnsmasq restart
 ```
 
 ###Setup DHCP
 ```bash
-root@mgmt:~# cp ~/aiticon/etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf
+root@mgmt:~# cp ~/gwo/etc/dhcp/dhcpd.conf /etc/dhcp/dhcpd.conf
 root@mgmt:~# service isc-dhcp-server restart
 ```
 
@@ -155,7 +136,7 @@ Status of ISC DHCP server: dhcpd is running.
 On your laptop/server in the Vagrant directory perform the following commands:
 ```bash
 $ export VAGRANT_DEFAULT_PROVIDER=virtualbox
-$ vagrant up oob bgp0 sec0 aggregation1 access0 access7 internet cloud1 access1 aggregation0
+$ vagrant up
 ```
 
 >  Do not just do a 'vagrant up' or it will take ~36 minutes to turn on vagrant.  This is because
@@ -163,57 +144,36 @@ $ vagrant up oob bgp0 sec0 aggregation1 access0 access7 internet cloud1 access1 
 >  the DHCP server and the hosts so it will wait for timeout 3 times in serial 
 
 #Validate connectivity
-Change into the aiticon directory and run the following commands
+Change into the gwo directory and run the following commands
 ```bash
-root@mgmt:~# cd aiticon
-root@mgmt:~/aiticon# 
-root@mgmt:~/aiticon# ansible network -m ping -u cumulus -k
+root@mgmt:~# cd gwo
+root@mgmt:~/gwo# 
+root@mgmt:~/gwo# ansible network -m ping -u cumulus -k
   - (pwd: CumulusLinux!)
-root@mgmt:~/aiticon# ansible servers -m ping -u vagrant -k
+root@mgmt:~/gwo# ansible servers -m ping -u vagrant -k
   - (pwd: vagrant)
 ```
 
 #Setup SSH keys and deploy to the network
 ```bash
-root@mgmt:~/aiticon# ssh-keygen -t rsa
-root@mgmt:~/aiticon# cp /root/.ssh/id_rsa.pub /var/www/html/authorized_keys
-root@mgmt:~/aiticon# cp ~/CUSTOMER/var/www/ztp_deploy.sh /var/www/html/
-root@mgmt:~/aiticon# ansible-playbook deploy_ssh_keys.yml -u vagrant -k
+root@mgmt:~/gwo# ssh-keygen -t rsa
+root@mgmt:~/gwo# cp /root/.ssh/id_rsa.pub /var/www/html/authorized_keys
+root@mgmt:~/gwo# cp ~/CUSTOMER/var/www/ztp_deploy.sh /var/www/html/
+root@mgmt:~/gwo# ansible-playbook deploy_ssh_keys.yml -u vagrant -k
   - (pwd: vagrant)
 ```
 
 ##Test passwordless connectivity to all (servers will fail, since network is not provisioned yet)
 ```bash
-root@mgmt:~/aiticon# ansible -m ping all
+root@mgmt:~/gwo# ansible -m ping all
 ```
 
 #Provision the Network via Automation
 Make sure to use the --extra-vars statement to run on Vitualbox otherwise it will attempt to run ZTP as it would in production on real equipment.  
 ```bash
-root@mgmt:~/aiticon# ansible-playbook aiticon.yml --extra-vars "phys_env=virt"
-```
-The play recap should look like the following
-```bash
-PLAY RECAP *********************************************************************
-access0                    : ok=32   changed=6    unreachable=0    failed=0
-access1                    : ok=31   changed=5    unreachable=0    failed=0
-access7                    : ok=31   changed=5    unreachable=0    failed=0
-aggregation0               : ok=32   changed=6    unreachable=0    failed=0
-aggregation1               : ok=31   changed=5    unreachable=0    failed=0
-bgp0                       : ok=31   changed=6    unreachable=0    failed=0
-cloud1                     : ok=32   changed=6    unreachable=0    failed=0
-internet                   : ok=8    changed=2    unreachable=0    failed=0
-lb-mysql-0                 : ok=0    changed=0    unreachable=1    failed=0
-lb0                        : ok=31   changed=6    unreachable=0    failed=0
-os-controller-0            : ok=0    changed=0    unreachable=1    failed=0
-sec0                       : ok=31   changed=12   unreachable=0    failed=0
-twads0                     : ok=0    changed=0    unreachable=1    failed=0
+root@mgmt:~/gwo# ansible-playbook gwo.yml --extra-vars "phys_env=virt"
 ```
 
-Now boot the servers from the laptop/server since the network as been provisioned 
-```bash
-$ vagrant up lb-mysql-0 os-controller-0 twads0
-```
 NOTE: WORK AROUND RIGHT NOW, the servers will come up with a vagrant default route for IPv4
 this means Ansible does not have reachability, this will require some minor work to the vagrant setup we have
 just do this for each server->
@@ -233,20 +193,16 @@ Now Ansible will work
 
 Deploy the keys for the servers (the servers will have received their IPv4 address via the DHCP relay now that the network is up)
 ```bash
-root@mgmt:/home/vagrant/aiticon# ansible-playbook deploy_ssh_keys.yml -k -u vagrant -l servers
+root@mgmt:/home/vagrant/gwo# ansible-playbook deploy_ssh_keys.yml -k -u vagrant -l servers
 ```
 Deploy config to servers
 '''bash
-root@mgmt:/home/vagrant/aiticon# ansible-playbook aiticon.yml -l servers
+root@mgmt:/home/vagrant/gwo# ansible-playbook gwo.yml -l servers
 '''
 
-#Test IPv4 Internet connectivity from de-f2-p-twads0
-- vagrant ssh twads0
+#Test IPv4 Internet connectivity from server01
+- vagrant ssh server01
 - ping 8.8.8.8
-
-#Test IPv6 Connectivity from os-controller-0
-- vagrant ssh os-controller-0
-- ping6 fd::105
 
 ```bash
 root@os-controller-0:~# ping6 fd::105 -I 2a06:71c0::1
