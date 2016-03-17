@@ -35,7 +35,7 @@ echo "Copying Key into /var/www/html..."
 cp /root/.ssh/id_rsa.pub /var/www/html/authorized_keys
 
 REPOSITORY="https://github.com/seanx820/gwo"
-dir=aiticon
+dir=gwo
 
 #rest of turnup
 echo "git clone $REPOSITORY" > /home/vagrant/turnup.sh
