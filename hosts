@@ -12,23 +12,17 @@ spine02
 exit01
 exit02
 
-[oob]
-oob
-
 [network:children]
 leaf
 exit
 spine
-external
 
 [spineandexternal:children]
 exit
 spine
-external
 
 [servers]
 server01
-
-
-[external]
-external
+server02
+server03
+server04

@@ -14,12 +14,12 @@
     - name: Copy authorized key for root user
       copy: src=/var/www/html/authorized_keys dest=/root/.ssh/authorized_keys
 
-- hosts: linuxhosts 
+- hosts: servers
   sudo: yes
   tasks:
     - name: Create cumulus user
       user: name=cumulus shell=/bin/bash groups=sudo
- 
+
     - name: Make ssh dir for cumulus user
       file: path=/home/cumulus/.ssh state=directory mode=0755
 
@@ -31,4 +31,3 @@
 
     - name: Copy authorized key for root user
       copy: src=/var/www/html/authorized_keys dest=/root/.ssh/authorized_keys
-
