@@ -23,6 +23,7 @@
 
 
 - hosts: leaf
+  gather_facts: False
   user: root
   tasks:
     - name: Gather BGP sum information
@@ -42,5 +43,3 @@
       register: traff
 
     - debug: var=traff.stdout_lines
-
-

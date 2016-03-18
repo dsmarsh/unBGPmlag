@@ -1,4 +1,4 @@
----    
+---
 - hosts: spineandexternal
   user: root
   roles:
@@ -10,16 +10,9 @@
   roles:
     - common
     - leaf
-     
+
 - hosts: servers
   user: root
   roles:
     - common
     - servers
-
-- hosts: external
-  user: root
-  roles:
-    - common
-    - external
-
