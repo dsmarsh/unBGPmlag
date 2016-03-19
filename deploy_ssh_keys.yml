@@ -14,9 +14,6 @@
     - name: Copy cumulus key into authorized_keys on web server
       copy: src=/root/.ssh/id_rsa dest=/var/www/html/authorized_keys
 
-    - name: Copy cumulus key into authorized_keys on web server
-      copy: src=var/www/ztp_deploy.sh dest=/var/www/ztp_deploy.sh
-
 - hosts: network
   sudo: yes
   tasks:
