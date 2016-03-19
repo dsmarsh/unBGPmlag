@@ -124,7 +124,7 @@ root@oob-mgmt-server:~/unBGPmlag# ansible servers -m ping -u vagrant -k
 ```bash
 root@oob-mgmt-server:~/unBGPmlag# ssh-keygen -t rsa
 root@oob-mgmt-server:~/unBGPmlag# cp /root/.ssh/id_rsa.pub /var/www/html/authorized_keys
-root@oob-mgmt-server:~/unBGPmlag# cp ~/CUSTOMER/var/www/ztp_deploy.sh /var/www/html/
+root@oob-mgmt-server:~/unBGPmlag# cp ~/unBGPmlag/var/www/ztp_deploy.sh /var/www/html/
 root@oob-mgmt-server:~/unBGPmlag# ansible-playbook deploy_ssh_keys.yml -u vagrant -k
   - (pwd: vagrant)
 ```
