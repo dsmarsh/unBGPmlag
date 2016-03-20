@@ -39,8 +39,7 @@
   tags:
     - remove_default
 
-- name: Refresh the Vagrant Interface
-  shell: ifdown vagrant; ifup vagrant
-  tags:
-    - remove_default
-
+# - name: Refresh the Vagrant Interface
+#   shell: ifdown vagrant; ifup vagrant
+#   tags:
+#     - remove_default
