@@ -41,5 +41,6 @@
 
 - name: Refresh the Vagrant Interface
   shell: ifdown vagrant; ifup vagrant
+  ignore_errors: yes
   tags:
     - remove_default

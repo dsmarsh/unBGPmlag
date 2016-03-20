@@ -14,12 +14,14 @@ interface {{interface}}
 {% endfor %}
 !
 {### Configure the fabric ports IPv6 settings for unnumbered operation ###}
+{% if bgpvars.exit_peers is defined -%}
 {% for interface in bgpvars.exit_peers.interfaces -%}
 interface {{interface}}
  no ipv6 nd suppress-ra
  ipv6 nd ra-interval 3
 !
 {% endfor %}
+{% endif -%}
 !
 router bgp {{ bgpvars.myasn }}
   bgp router-id {{loopback_ip|replace("/32", "")}}
@@ -63,6 +65,7 @@ router bgp {{ bgpvars.myasn }}
    neighbor {{interface}} peer-group internal_fabric
  {% endfor %} 
 
+{% if bgpvars.exit_peers is defined -%}
 {### Loop through server BGP connections ###}
   neighbor exit_peers peer-group
   neighbor exit_peers description {{bgpvars.exit_peers.description}}
@@ -85,6 +88,7 @@ router bgp {{ bgpvars.myasn }}
    neighbor {{interface}} interface
    neighbor {{interface}} peer-group exit_peers
  {% endfor %}
+{% endif -%}
 !
 address-family ipv6 unicast
 {### Configure ipv6 network statements ###}
@@ -100,25 +104,27 @@ address-family ipv6 unicast
    neighbor {{interface}} activate
  {% endfor %}
 !
+{% if bgpvars.exit_peers is defined -%}
 {### Configure fw peers interfaces ###}
    neighbor exit_peers activate
  {% for interface in bgpvars.exit_peers.interfaces -%}
    neighbor {{interface}} peer-group exit_peers
    neighbor {{interface}} activate
  {% endfor %}
-{### Configure internal fabric ipv6 prefix lists ###}
- {% if bgpvars.internal_fabric.prefix_list_out is defined -%}
-   neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_out}} out
- {% endif -%}
- {% if bgpvars.internal_fabric.prefix_list_in is defined -%}
-   neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_in}} in
- {% endif -%}
 {### Configure exit_peers ipv6 prefix lists ###}
  {% if bgpvars.exit_peers.prefix_list_out is defined -%}
    neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_out}} out
  {% endif -%}
  {% if bgpvars.exit_peers.prefix_list_in is defined -%}
    neighbor exit_peers prefix-list {{bgpvars.exit_peers.prefix_list_in}} in
+ {% endif -%}
+{% endif -%}
+{### Configure internal fabric ipv6 prefix lists ###}
+ {% if bgpvars.internal_fabric.prefix_list_out is defined -%}
+   neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_out}} out
+ {% endif -%}
+ {% if bgpvars.internal_fabric.prefix_list_in is defined -%}
+   neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_in}} in
  {% endif -%}
 ! 
  exit-address-family

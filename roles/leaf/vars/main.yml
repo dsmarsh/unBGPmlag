@@ -1,7 +1,7 @@
 interfaces:
   leaf01:
     loopback:
-      ipv4: "5.5.5.532"      
+      ipv4: "5.5.5.5/32"      
   leaf02:
     loopback:
       ipv4: "6.6.6.6/32"
@@ -13,64 +13,92 @@ interfaces:
       ipv4: "8.8.8.8/32"       
       
 bgp:
-  spine01:
-    myasn: "65001"
-    networks: ["3.3.3.3/32"]
+  leaf01:
+    myasn: "65010"
+    networks: ["5.5.5.5/32"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
-      interfaces: ["swp1","swp2","swp3","swp4"]
+      interfaces: ["swp51","swp52"]
       prefix_list_out: "allow_limited_default"
       prefix_list_in: "allow_internal_servers"
       description: "Internal Fabric Network"
-    exit_peers:
-      interfaces: ["swp29", "swp30"]
-      prefix_list_out: "allow_internal_servers"
-      prefix_list_in: "allow_default_down"
-      description: "North to internet"
 
-  spine02:
-    myasn: "65002"
-    networks: ["4.4.4.4/32"]
+  leaf02:
+    myasn: "65010"
+    networks: ["6.6.6.6/32"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
-      interfaces: ["swp1","swp2","swp3","swp4"]
+      interfaces: ["swp51","swp52"]
       prefix_list_out: "allow_limited_default"
       prefix_list_in: "allow_internal_servers"
       description: "Internal Fabric Network"
-    exit_peers:
-      interfaces: ["swp29", "swp30"]
-      prefix_list_out: "allow_internal_servers"
-      prefix_list_in: "allow_default_down"
-      description: "North to internet"
  
+  leaf03:
+    myasn: "65011"
+    networks: ["7.7.7.7/32"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp51","swp52"]
+      prefix_list_out: "allow_limited_default"
+      prefix_list_in: "allow_internal_servers"
+      description: "Internal Fabric Network"
+
+  leaf04:
+    myasn: "65011"
+    networks: ["8.8.8.8/32"]
+    #Internal Fabric ports to run BGP unnumbered on
+    internal_fabric:
+      interfaces: ["swp51","swp52"]
+      prefix_list_out: "allow_limited_default"
+      prefix_list_in: "allow_internal_servers"
+      description: "Internal Fabric Network"
             
 prefix_lists:
-  spine01:
+  leaf01:
     allow_limited_default:
       - "10 permit 0.0.0.0/0"
-      - "11 permit 3.3.3.3/32"
+      - "11 permit 5.5.5.5/32"
       - "100 deny any"
     allow_default_down:
       - "10 permit 0.0.0.0/0"
-      - "40 permit 1.1.1.1/32"
-      - "41 permit 2.2.2.2/32"
       - "100 deny any"
     allow_internal_servers:
       - "10 permit 9.9.9.9/32" 
       - "100 deny any"
 
-  spine02:
+  leaf02:
     allow_limited_default:
       - "10 permit 0.0.0.0/0"
-      - "11 permit 4.4.4.4/32"
+      - "11 permit 6.6.6.6/32"
       - "100 deny any"
     allow_default_down:
       - "10 permit 0.0.0.0/0"
-      - "40 permit 1.1.1.1/32"
-      - "41 permit 2.2.2.2/32"
       - "100 deny any"
     allow_internal_servers:
       - "10 permit 9.9.9.9/32" 
       - "100 deny any"
 
+  leaf03:
+    allow_limited_default:
+      - "10 permit 0.0.0.0/0"
+      - "11 permit 7.7.7.7/32"
+      - "100 deny any"
+    allow_default_down:
+      - "10 permit 0.0.0.0/0"
+      - "100 deny any"
+    allow_internal_servers:
+      - "10 permit 9.9.9.9/32"
+      - "100 deny any"
+
+  leaf04:
+    allow_limited_default:
+      - "10 permit 0.0.0.0/0"
+      - "11 permit 8.8.8.8/32"
+      - "100 deny any"
+    allow_default_down:
+      - "10 permit 0.0.0.0/0"
+      - "100 deny any"
+    allow_internal_servers:
+      - "10 permit 9.9.9.9/32"
+      - "100 deny any"
    

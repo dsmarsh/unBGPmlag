@@ -41,6 +41,7 @@ iface {{interface}}
 {% endfor %}
 {% endif -%}
 
+{% if bgpvars.exit_peers is defined -%}
 {% if bgpvars.exit_peers.interfaces is defined -%}
 #### Firewall Southbound Ports ####
 {% for interface in bgpvars.exit_peers.interfaces -%}
@@ -48,6 +49,7 @@ auto {{interface}}
 iface {{interface}}
   mtu 9216
 {% endfor %}
+{% endif -%}
 {% endif -%}
 
 
