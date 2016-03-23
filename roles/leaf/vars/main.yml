@@ -1,7 +1,119 @@
+switches:
+  leaf01:
+    loopback:
+      ipv4: "5.5.5.5/32"
+    interfaces:
+    bonds:
+    bridges:
+    bgp:
+      myasn: "65010"
+      networks: ["5.5.5.5/32"]
+      #Internal Fabric ports to run BGP unnumbered on
+      internal_fabric:
+        interfaces: ["swp51","swp52"]
+        prefix_list_out: "allow_limited_default"
+        prefix_list_in: "allow_internal_servers"
+        description: "Internal Fabric Network"
+    prefix_lists:
+      leaf01:
+        allow_limited_default:
+          - "10 permit 0.0.0.0/0"
+          - "11 permit 5.5.5.5/32"
+          - "100 deny any"
+        allow_default_down:
+          - "10 permit 0.0.0.0/0"
+          - "100 deny any"
+        allow_internal_servers:
+          - "10 permit 9.9.9.9/32"
+          - "100 deny any"
+
+  leaf02:
+    interfaces:
+      loopback:
+        ipv4: "6.6.6.6/32"
+    bonds:
+    bridges:
+    bgp:
+      myasn: "65010"
+      networks: ["6.6.6.6/32"]
+      #Internal Fabric ports to run BGP unnumbered on
+      internal_fabric:
+        interfaces: ["swp51","swp52"]
+        prefix_list_out: "allow_limited_default"
+        prefix_list_in: "allow_internal_servers"
+        description: "Internal Fabric Network"
+    prefix_lists:
+      allow_limited_default:
+        - "10 permit 0.0.0.0/0"
+        - "11 permit 6.6.6.6/32"
+        - "100 deny any"
+      allow_default_down:
+        - "10 permit 0.0.0.0/0"
+        - "100 deny any"
+      allow_internal_servers:
+        - "10 permit 9.9.9.9/32"
+        - "100 deny any"
+
+  leaf03:
+    interfaces:
+      loopback:
+        ipv4: "7.7.7.7/32"
+    bonds:
+    bridges:
+    bgp:
+      myasn: "65011"
+      networks: ["7.7.7.7/32"]
+      #Internal Fabric ports to run BGP unnumbered on
+      internal_fabric:
+        interfaces: ["swp51","swp52"]
+        prefix_list_out: "allow_limited_default"
+        prefix_list_in: "allow_internal_servers"
+        description: "Internal Fabric Network"
+    prefix_lists:
+      allow_limited_default:
+        - "10 permit 0.0.0.0/0"
+        - "11 permit 7.7.7.7/32"
+        - "100 deny any"
+      allow_default_down:
+        - "10 permit 0.0.0.0/0"
+        - "100 deny any"
+      allow_internal_servers:
+        - "10 permit 9.9.9.9/32"
+        - "100 deny any"
+
+  leaf04:
+    interfaces:
+      loopback:
+        ipv4: "8.8.8.8/32"
+    bonds:
+    bridges:
+    bgp:
+      myasn: "65011"
+      networks: ["8.8.8.8/32"]
+      #Internal Fabric ports to run BGP unnumbered on
+      internal_fabric:
+        interfaces: ["swp51","swp52"]
+        prefix_list_out: "allow_limited_default"
+        prefix_list_in: "allow_internal_servers"
+        description: "Internal Fabric Network"
+    prefix_lists:
+      allow_limited_default:
+        - "10 permit 0.0.0.0/0"
+        - "11 permit 8.8.8.8/32"
+        - "100 deny any"
+      allow_default_down:
+        - "10 permit 0.0.0.0/0"
+        - "100 deny any"
+      allow_internal_servers:
+        - "10 permit 9.9.9.9/32"
+        - "100 deny any"
+
+
+
 interfaces:
   leaf01:
     loopback:
-      ipv4: "5.5.5.5/32"      
+      ipv4: "5.5.5.5/32"
   leaf02:
     loopback:
       ipv4: "6.6.6.6/32"
@@ -10,8 +122,8 @@ interfaces:
       ipv4: "7.7.7.7/32"
   leaf04:
     loopback:
-      ipv4: "8.8.8.8/32"       
-      
+      ipv4: "8.8.8.8/32"
+
 bgp:
   leaf01:
     myasn: "65010"
@@ -32,7 +144,7 @@ bgp:
       prefix_list_out: "allow_limited_default"
       prefix_list_in: "allow_internal_servers"
       description: "Internal Fabric Network"
- 
+
   leaf03:
     myasn: "65011"
     networks: ["7.7.7.7/32"]
@@ -52,7 +164,7 @@ bgp:
       prefix_list_out: "allow_limited_default"
       prefix_list_in: "allow_internal_servers"
       description: "Internal Fabric Network"
-            
+
 prefix_lists:
   leaf01:
     allow_limited_default:
@@ -63,7 +175,7 @@ prefix_lists:
       - "10 permit 0.0.0.0/0"
       - "100 deny any"
     allow_internal_servers:
-      - "10 permit 9.9.9.9/32" 
+      - "10 permit 9.9.9.9/32"
       - "100 deny any"
 
   leaf02:
@@ -75,7 +187,7 @@ prefix_lists:
       - "10 permit 0.0.0.0/0"
       - "100 deny any"
     allow_internal_servers:
-      - "10 permit 9.9.9.9/32" 
+      - "10 permit 9.9.9.9/32"
       - "100 deny any"
 
   leaf03:
@@ -101,4 +213,3 @@ prefix_lists:
     allow_internal_servers:
       - "10 permit 9.9.9.9/32"
       - "100 deny any"
-   
