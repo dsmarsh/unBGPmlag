@@ -1,0 +1,15 @@
+---
+- hosts: network
+  tasks:
+  - name: create directory for ansible custom facts
+    file: state=directory recurse=yes path=/etc/ansible/facts.d
+    delegate_to: 127.0.0.1
+  
+  - name: install custom bgp sum fact
+    copy: src=bgpsumm.fact dest=/etc/ansible/facts.d
+    notify:
+      - re-read facts
+  
+  handlers:
+  - name: re-read facts
+    setup: filter=ansible_local
