@@ -1,14 +1,18 @@
 ---
 - hosts: network
+  remote_user: root
   tasks:
   - name: create directory for ansible custom facts
     file: state=directory recurse=yes path=/etc/ansible/facts.d
-    delegate_to: 127.0.0.1
-  
-  - name: install custom bgp sum fact
-    copy: src=bgpsumm.fact dest=/etc/ansible/facts.d
+
+  - name: export json output into fact in fact directory
+    shell: cl-bgp summary show json > /etc/ansible/facts.d/bgpsum.fact
     notify:
       - re-read facts
+
+  - meta: flush_handlers
+
+  - debug: var=ansible_local
   
   handlers:
   - name: re-read facts
