@@ -5,12 +5,12 @@ iface eth0 inet dhcp
 auto vagrant
 iface vagrant inet dhcp
 
-
-#### LOOPBACKS ####
 auto lo
 iface lo inet loopback
   address 5.5.5.5/32
-
+auto swp1
+iface swp1
+  address 10.10.1.1/24
 
 #### Fabric ports ####
 auto swp51
@@ -19,9 +19,3 @@ iface swp51
 auto swp52
 iface swp52
   mtu 9216
-
-
-
-
-
-

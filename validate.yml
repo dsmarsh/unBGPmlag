@@ -2,27 +2,28 @@
 - hosts: network
   remote_user: root
   tasks:
-#  - name: create directory for ansible custom facts
-#    file: state=directory recurse=yes path=/etc/ansible/facts.d
 
-#  - name: copy facts to remote machine
-#    copy: src={{ item }} dest=/etc/ansible/facts.d/ mode=755
-#    with_items:
-#      - bgpsum.fact
-#      - bgproute.fact
-
-#  - name: read in facts
-#    setup: filter=ansible_local
-
-#  - meta: flush_handlers
-
-  - debug: msg="total number of peers is {{ ansible_local.bgpsum.totalPeers }}"
-    failed_when: "ansible_local.bgpsum.totalPeers == 6"
+  - debug: msg="{{ ansible_hostname }} has {{ ansible_local.bgpsum.totalPeers }} BGP Peers"
+    failed_when: "ansible_local.bgpsum.totalPeers != 6"
     when: inventory_hostname in groups.spine
 
-  - debug: msg="total number of peers is {{ ansible_local.bgpsum.totalPeers }}"
-    failed_when: "ansible_local.bgpsum.totalPeers == 2"
+  - debug: msg="{{ ansible_hostname }} has {{ ansible_local.bgpsum.totalPeers }} BGP Peers"
+    changed_when: "ansible_local.bgpsum.totalPeers != 2"
     when: inventory_hostname in groups.leaf
 
-  - debug: msg="number of bgp routes {{ ansible_local.bgproute.routes|length }}"
-    changed_when: "ansible_local.bgproute.routes|length == 2"
+  - debug: msg="{{ ansible_hostname }} has {{ ansible_local.bgproute.routes|length }} BGP Routes"
+    changed_when: "ansible_local.bgproute.routes|length != 13"
+
+  - set_fact: 
+      ips: []
+  - set_fact: 
+      ips: "{{ ips + hostvars[item].ansible_all_ipv4_addresses }}"
+    with_inventory_hostnames: network
+
+  - name: ping all other IPs in the CLOS
+    shell: "ping {{ item }} -c 1"
+    with_items:
+      - "{{ ips }}"
+    register: result
+    changed_when: "result.rc != 0"
+

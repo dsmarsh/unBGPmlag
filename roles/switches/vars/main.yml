@@ -64,7 +64,7 @@ bgp:
 
   exit02:
     myasn: "65502"
-    networks: ["99.99.99.99/32"]
+    networks: ["2.2.2.2/32","99.99.99.99/32"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
       interfaces: ["swp51","swp52"]
