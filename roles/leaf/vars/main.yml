@@ -2,7 +2,7 @@
 interfaces:
   leaf01:
     loopback:
-      ipv4: "11.11.11.11/32"
+      ipv4: "5.5.5.5/32"
     swp1:
       ipv4: "10.10.1.0/24"
   leaf02:
@@ -24,7 +24,7 @@ interfaces:
 bgp:
   leaf01:
     myasn: "65010"
-    networks: ["11.11.11.11/32", "10.10.1.0/24"]
+    networks: ["5.5.5.5/32", "10.10.1.0/24"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
       interfaces: ["swp51","swp52"]
@@ -66,7 +66,7 @@ prefix_lists:
   leaf01:
     allow_limited_default:
       - "10 permit 0.0.0.0/0"
-      - "11 permit 11.11.11.11/32"
+      - "11 permit 5.5.5.5/32"
       - "100 deny any"
     allow_default_down:
       - "10 permit 0.0.0.0/0"
@@ -112,18 +112,16 @@ prefix_lists:
       - "100 deny any"
 
 
-
-
 switches:
   leaf01:
     loopback:
-      ipv4: "11.11.11.11/32"
+      ipv4: "5.5.5.5/32"
     interfaces:
     bonds:
     bridges:
     bgp:
       myasn: "65010"
-      networks: ["11.11.11.11/32"]
+      networks: ["5.5.5.5/32"]
       #Internal Fabric ports to run BGP unnumbered on
       internal_fabric:
         interfaces: ["swp51","swp52"]
@@ -134,7 +132,7 @@ switches:
       leaf01:
         allow_limited_default:
           - "10 permit 0.0.0.0/0"
-          - "11 permit 11.11.11.11/32"
+          - "11 permit 5.5.5.5/32"
           - "100 deny any"
         allow_default_down:
           - "10 permit 0.0.0.0/0"
