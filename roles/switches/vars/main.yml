@@ -28,8 +28,8 @@ bgp:
       description: "Internal Fabric Network"
     exit_peers:
       interfaces: ["swp29", "swp30"]
-      prefix_list_out: "allow_internal_servers"
-      prefix_list_in: "allow_default_down"
+      # prefix_list_out: "allow_internal_servers"
+      # prefix_list_in: "allow_default_down"
       description: "FW Network"
 
   spine02:
@@ -43,8 +43,8 @@ bgp:
       description: "Internal Fabric Network"
     exit_peers:
       interfaces: ["swp29", "swp30"]
-      prefix_list_out: "allow_internal_servers"
-      prefix_list_in: "allow_default_down"
+      # prefix_list_out: "allow_internal_servers"
+      # prefix_list_in: "allow_default_down"
       description: "FW Network"
 
   exit01:
