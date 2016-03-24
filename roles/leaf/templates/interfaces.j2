@@ -10,7 +10,7 @@ iface vagrant inet dhcp
 
 {% for interface in  node.keys() -%}
 auto {{interface}}
-{% if interface == "lo" -%}
+{% if interface == "loopback" -%}
 iface lo inet loopback
 {% else %}
 iface {{interface}}
