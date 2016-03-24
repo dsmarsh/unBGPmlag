@@ -30,9 +30,9 @@
   tags:
     - local
 
-- name: Disable ZTP for virtual environment
-  command: /usr/lib/cumulus/autoprovision --disable
-  ignore_errors: yes
+# - name: Disable ZTP for virtual environment
+#   command: /usr/lib/cumulus/autoprovision --disable
+#   ignore_errors: yes
 
 - name: Delete default route on vagrant device
   copy: src=etc/dhcp/dhclient-exit-hooks.d/remove_default_vagrant dest=/etc/dhcp/dhclient-exit-hooks.d/remove_default_vagrant

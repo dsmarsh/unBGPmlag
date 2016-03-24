@@ -17,7 +17,7 @@
     - local
 
 - name: Restart Networking
-  shell: ifreload -a
+  command: service networking restart
   tags:
     - interfaces
 
@@ -102,4 +102,3 @@
 #  when: mgmtvrf.stat.exists == False
 #  tags:
 #    - mgmtvrf
-
