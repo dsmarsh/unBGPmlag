@@ -33,7 +33,7 @@ bgp:
       description: "Internal Fabric Network"
 
   leaf02:
-    myasn: "65010"
+    myasn: "65011"
     networks: ["6.6.6.6/32", "10.10.2.0/24"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
@@ -43,7 +43,7 @@ bgp:
       description: "Internal Fabric Network"
 
   leaf03:
-    myasn: "65011"
+    myasn: "65012"
     networks: ["7.7.7.7/32", "10.10.3.0/24"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
@@ -53,7 +53,7 @@ bgp:
       description: "Internal Fabric Network"
 
   leaf04:
-    myasn: "65011"
+    myasn: "65013"
     networks: ["8.8.8.8/32", "10.10.4.0/24"]
     #Internal Fabric ports to run BGP unnumbered on
     internal_fabric:
