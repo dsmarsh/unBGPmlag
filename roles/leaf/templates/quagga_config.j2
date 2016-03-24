@@ -63,7 +63,7 @@ router bgp {{ bgpvars.myasn }}
  {% for interface in bgpvars.internal_fabric.interfaces -%}
    neighbor {{interface}} interface
    neighbor {{interface}} peer-group internal_fabric
- {% endfor %} 
+ {% endfor %}
 
 {% if bgpvars.exit_peers is defined -%}
 {### Loop through server BGP connections ###}
@@ -126,22 +126,24 @@ address-family ipv6 unicast
  {% if bgpvars.internal_fabric.prefix_list_in is defined -%}
    neighbor internal_fabric prefix-list {{bgpvars.internal_fabric.prefix_list_in}} in
  {% endif -%}
-! 
+!
  exit-address-family
 !
 
 !
-{### Configure prefix lists ###} 
+{### Configure prefix lists ###}
+{% if prefix_lists is defined %}
 {% set lists = prefix_lists[ansible_hostname] -%}
 {% for list_name in lists.keys() -%}
   {% for seq in lists[list_name] -%}
   ip prefix-list {{list_name}} seq {{seq}}
 {% endfor %}
 {% endfor %}
+{% endif %}
 !
 {### Configure ipv6 prefix lists ###}
-{% if prefix_listsv6 is defined -%} 
-{% if prefix_listsv6[ansible_hostname] is defined -%} 
+{% if prefix_listsv6 is defined -%}
+{% if prefix_listsv6[ansible_hostname] is defined -%}
 {% set lists = prefix_listsv6[ansible_hostname] -%}
 {% for list_name in lists.keys() -%}
   {% for seq in lists[list_name] -%}
