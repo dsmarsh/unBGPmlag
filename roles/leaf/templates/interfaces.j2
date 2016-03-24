@@ -10,11 +10,11 @@ iface vagrant inet dhcp
 
 {% for interface in  node.keys() -%}
 auto {{interface}}
-{% if interface == "loopback" -%}
-iface loopback inet loopback
+{% if interface == "lo" -%}
+iface lo inet loopback
 {% else %}
 iface {{interface}}
-{% endif -%}
+{% endif %}
   address {{node[interface].ipv4}}
 {% if node[interface].ipv6 is defined %}
   address {{node[interface].ipv6}}

@@ -1,22 +1,22 @@
 
 interfaces:
   leaf01:
-    loopback:
+    lo:
       ipv4: "5.5.5.5/32"
     swp1:
       ipv4: "10.10.1.1/24"
   leaf02:
-    loopback:
+    lo:
       ipv4: "6.6.6.6/32"
     swp1:
       ipv4: "10.10.2.1/24"
   leaf03:
-    loopback:
+    lo:
       ipv4: "7.7.7.7/32"
     swp1:
       ipv4: "10.10.3.1/24"
   leaf04:
-    loopback:
+    lo:
       ipv4: "8.8.8.8/32"
     swp1:
       ipv4: "10.10.4.1/24"
