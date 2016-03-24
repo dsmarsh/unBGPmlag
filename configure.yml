@@ -10,9 +10,3 @@
   roles:
     - common
     - leaf
-
-- hosts: servers
-  user: root
-  roles:
-    - common
-    - servers

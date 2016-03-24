@@ -5,15 +5,24 @@
   - name: create directory for ansible custom facts
     file: state=directory recurse=yes path=/etc/ansible/facts.d
 
-  - name: export json output into fact in fact directory
-    shell: cl-bgp summary show json > /etc/ansible/facts.d/bgpsum.fact
-    notify:
-      - re-read facts
+  - name: copy facts to remote machine
+    copy: src={{ item }} dest=/etc/ansible/facts.d/ mode=755
+    with_items:
+      - bgpsum.fact
+      - bgproute.fact
+
+  - name: read in facts
+    setup: filter=ansible_local
 
   - meta: flush_handlers
 
-  - debug: var=ansible_local
-  
-  handlers:
-  - name: re-read facts
-    setup: filter=ansible_local
+  - debug: msg="total number of peers is {{ ansible_local.bgpsum.totalPeers }}"
+    changed_when: "ansible_local.bgpsum.totalPeers == 6"
+    when: inventory_hostname in groups.spine
+
+  - debug: msg="total number of peers is {{ ansible_local.bgpsum.totalPeers }}"
+    changed_when: "ansible_local.bgpsum.totalPeers == 2"
+    when: inventory_hostname in groups.leaf
+
+  - debug: msg="number of bgp routes {{ ansible_local.bgproute.routes|length }}"
+    changed_when: "ansible_local.bgproute.routes|length == 2"

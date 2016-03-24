@@ -1,0 +1,2 @@
+#!/bin/sh
+cl-bgp summary show json

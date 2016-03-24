@@ -44,3 +44,15 @@
   ignore_errors: yes
   tags:
     - remove_default
+
+- name: create directory for ansible custom facts
+  file: state=directory recurse=yes path=/etc/ansible/facts.d
+
+- name: copy facts to remote machine
+  copy: src={{ item }} dest=/etc/ansible/facts.d/ mode=755
+  with_items:
+    - bgpsum.fact
+    - bgproute.fact
+
+- name: read in facts
+  setup: filter=ansible_local
