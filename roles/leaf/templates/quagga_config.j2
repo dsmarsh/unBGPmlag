@@ -1,5 +1,5 @@
 {% set bgpvars = bgp[ansible_hostname] -%}
-{% set loopback_ip = interfaces[ansible_hostname].loopback.ipv4 -%}
+{% set loopback_ip = interfaces[ansible_hostname].lo.ipv4 -%}
 
 {### Set the logging and save all the config in Quagga.conf file ###}
 log file /var/log/quagga/quagga.log
