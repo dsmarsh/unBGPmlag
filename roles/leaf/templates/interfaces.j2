@@ -8,29 +8,24 @@ iface eth0 inet dhcp
 auto vagrant
 iface vagrant inet dhcp
 
-
-{% if node.loopback is defined %}
-#### LOOPBACKS ####
-auto lo
+{% for interface in  node.keys() -%}
+auto {{interface}}
+{% if interface == "lo" -%}
 iface lo inet loopback
-{% for interface in node.loopback.keys() %}
-{% if interface == "ipv4" %}
-  address {{node.loopback[interface]}}
-{% elif interface == "ipv6" %}
-  address {{node.loopback[interface]}}
+{% else %}
+iface {{interface}}
+{% endif -%}
+  address {{node[interface].ipv4}}
+{% if node[interface].ipv6 is defined %}
+  address {{node[interface].ipv6}}
+{% endif %}
+{% if node[interface].alias is defined %}
+  alias {{ node[interface].alias }}
+{% endif %}
+{% if node[interface].mtu is defined %}
+  mtu {{ node[interface].mtu }}
 {% endif %}
 {% endfor %}
-{% endif %}
-
-
-{% if node.swp30 is defined -%}
-#### oob ports for isc-dhcp-relay ####
-auto swp30
-iface swp30
-  address {{node.swp30.ipv4}}
-{% endif -%}
-
-
 
 {% if bgpvars.internal_fabric.interfaces is defined -%}
 #### Fabric ports ####
@@ -51,9 +46,3 @@ iface {{interface}}
 {% endfor %}
 {% endif -%}
 {% endif -%}
-
-
-
-
-
-
