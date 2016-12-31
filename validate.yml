@@ -20,7 +20,7 @@
       ips: "{{ ips + hostvars[item].ansible_all_ipv4_addresses }}"
     with_inventory_hostnames: network
 
-  - name: ping all other IPs in the CLOS
+  - name: ping all other IPs in the clos
     shell: "ping {{ item }} -c 1"
     with_items:
       - "{{ ips }}"
